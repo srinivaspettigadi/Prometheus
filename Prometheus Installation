@@ -1,0 +1,34 @@
+Download the binary from this site
+
+https://prometheus.io/download/
+
+srinivas@srinivas-Inspiron-3521:~/prometheus$ pwd
+/home/srinivas/prometheus
+srinivas@srinivas-Inspiron-3521:~/prometheus$ cd prometheus-2.28.1.linux-amd64/
+srinivas@srinivas-Inspiron-3521:~/prometheus/prometheus-2.28.1.linux-amd64$ ls -lrt
+total 181696
+-rwxr-xr-x 1 srinivas srinivas 98503354 Jul  1 20:52 prometheus
+-rwxr-xr-x 1 srinivas srinivas 87509137 Jul  1 20:55 promtool
+-rw-r--r-- 1 srinivas srinivas     3646 Jul  1 21:59 NOTICE
+-rw-r--r-- 1 srinivas srinivas    11357 Jul  1 21:59 LICENSE
+drwxr-xr-x 2 srinivas srinivas     4096 Jul  1 21:59 consoles
+drwxr-xr-x 2 srinivas srinivas     4096 Jul  1 21:59 console_libraries
+-rw-r--r-- 1 srinivas srinivas      926 Jul  1 21:59 prometheus.yml
+drwxrwxr-x 4 srinivas srinivas     4096 Jul 24 21:22 data
+srinivas@srinivas-Inspiron-3521:~/prometheus/prometheus-2.28.1.linux-amd64$ sudo cp -pr . /usr/local/bin/prometheus
+
+Creating as a Service
+=======================
+root@srinivas-Inspiron-3521:/etc/systemd/system# pwd
+/etc/systemd/system
+root@srinivas-Inspiron-3521:/etc/systemd/system# cat prometheus.service 
+[Unit]
+Description=Used for Prometheus Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/prometheus/prometheus --config.file=/usr/local/bin/prometheus/prometheus.yml
+
+[Install]
+WantedBy=multi-user.target
