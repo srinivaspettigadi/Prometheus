@@ -32,3 +32,75 @@ ExecStart=/usr/local/bin/prometheus/prometheus --config.file=/usr/local/bin/prom
 
 [Install]
 WantedBy=multi-user.target
+
+
+Creating same service for node exporter
+----------------------------------------
+
+NodeExporter --> It is the way to measure the variuos machine resources (memory, cpu, disk etc..)
+
+rinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ ls -lrt
+total 18080
+-rwxr-xr-x 1 srinivas srinivas 18494531 Jul 15 22:06 node_exporter
+-rw-r--r-- 1 srinivas srinivas      463 Jul 16 15:36 NOTICE
+-rw-r--r-- 1 srinivas srinivas    11357 Jul 16 15:36 LICENSE
+srinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ sudo cp node_exporter /usr/local/bin/
+[sudo] password for srinivas: 
+srinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ ls /usr/local/bin/
+node_exporter  prometheus
+
+
+[Unit]
+Description=Used for Node Exporter Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+
+RELOAD THE SYSTEM DAEMON
+=============================
+
+srinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ systemctl daemon-reload
+srinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ sudo service node-exporter status
+● node-exporter.service - Used for Node Exporter Service
+     Loaded: loaded (/etc/systemd/system/node-exporter.service; disabled; vendor preset: enabled)
+     Active: inactive (dead)
+srinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ sudo service node-exporter start
+srinivas@srinivas-Inspiron-3521:~/prometheus/node_exporter-1.2.0.linux-amd64$ sudo service node-exporter status
+● node-exporter.service - Used for Node Exporter Service
+     Loaded: loaded (/etc/systemd/system/node-exporter.service; disabled; vendor preset: enabled)
+     Active: active (running) since Sat 2021-07-24 23:26:20 IST; 1s ago
+   Main PID: 63517 (node_exporter)
+      Tasks: 5 (limit: 4541)
+     Memory: 2.7M
+     CGroup: /system.slice/node-exporter.service
+             └─63517 /usr/local/bin/node_exporter
+
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=the>
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=time
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=tim>
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=udp>
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=una>
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=vms>
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=xfs
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:115 collector=zfs
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:20.828Z caller=node_exporter.go:199 msg="Listenin>
+Jul 24 23:26:20 srinivas-Inspiron-3521 node_exporter[63517]: level=info ts=2021-07-24T17:56:2
+
+
+Sample Queries
+-------------------
+prometheus_http_requests_total{code="400"}
+
+Element	Value
+prometheus_http_requests_total{code="400",handler="/api/v1/query",instance="localhost:9090",job="prometheus"}	1
+
+
+
+
+
+
