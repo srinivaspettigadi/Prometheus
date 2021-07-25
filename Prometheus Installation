@@ -33,6 +33,32 @@ ExecStart=/usr/local/bin/prometheus/prometheus --config.file=/usr/local/bin/prom
 [Install]
 WantedBy=multi-user.target
 
+Creating Prometheus rules file and adding the file to prometheus config file
+===============================================================================
+===============================================================================
+
+Under the path ---> /usr/local/bin/prometheus
+create a new file named  ---------> prometheus_rules.yml 
+
+srinivas@srinivas-Inspiron-3521:/usr/local/bin/prometheus$ pwd
+/usr/local/bin/prometheus
+srinivas@srinivas-Inspiron-3521:/usr/local/bin/prometheus$ cat prometheus_rules.yml 
+groups:
+  - name: Custom_rules
+    rules:
+      - record: Node_mem_srini_rule                     -----------------------> this name can be used in the place of expression, it  is a custom rule.
+        expr: 100-(100*node_memory_MemFree_bytes/node_memory_MemTotal_bytes)
+
+
+Add the new file created prometheus_rules.yml  in the default prometheus config file
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+    - "prometheus_rules.yml"     ------------------------> this name
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+
 
 Creating same service for node exporter
 ----------------------------------------
